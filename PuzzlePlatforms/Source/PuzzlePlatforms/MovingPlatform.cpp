@@ -11,14 +11,26 @@ AMovingPlatform::AMovingPlatform()
 }
 
 
-void AMovingPlatform::Tick(float deltaTime) 
+void AMovingPlatform::BeginPlay()
 {
-	Super::Tick(deltaTime);
-
+	Super::BeginPlay();
 	if (HasAuthority()) 
 	{
-		FVector location = GetActorLocation();
-		location += FVector(speed * deltaTime, 0, 0);
-		SetActorLocation(location);
+		SetReplicates(true);
+		SetReplicateMovement(true);
+	}
+}
+
+void AMovingPlatform::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	if (!HasAuthority()) 
+	{
+		FVector Location = GetActorLocation();
+		FVector GlobalTargetLocation = GetTransform().TransformPosition(TargetLocation);
+		FVector Direction = (GlobalTargetLocation - Location).GetSafeNormal();
+		Location += Speed * DeltaTime * Direction;
+		SetActorLocation(Location);
 	}
 }
