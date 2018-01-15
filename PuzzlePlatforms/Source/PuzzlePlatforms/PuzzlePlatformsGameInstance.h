@@ -15,6 +15,7 @@ class PUZZLEPLATFORMS_API UPuzzlePlatformsGameInstance : public UGameInstance
 	GENERATED_BODY()
 
 public:
+
 	UPuzzlePlatformsGameInstance(const FObjectInitializer &ObjectInitilizer);
 	virtual void Init();
 
@@ -23,4 +24,6 @@ public:
 	UFUNCTION(Exec)
 	void Join(const FString& Address);
 	
+private:
+	TSubclassOf<class UUserWidget> MenuClass;
 };
