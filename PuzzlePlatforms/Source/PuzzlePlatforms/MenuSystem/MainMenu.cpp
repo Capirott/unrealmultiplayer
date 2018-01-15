@@ -2,6 +2,31 @@
 
 #include "Button.h"
 
+void UMainMenu::Setup()
+{
+	this->AddToViewport();
+
+	UWorld *World = GetWorld();
+	if (!ensure(World != nullptr)) return;
+	APlayerController* PlayerController = World->GetFirstPlayerController();
+	if (!ensure(PlayerController != nullptr)) return;
+
+	FInputModeUIOnly InputModeData;
+	InputModeData.SetWidgetToFocus(this->TakeWidget());
+	InputModeData.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
+	PlayerController->SetInputMode(InputModeData);
+	PlayerController->bShowMouseCursor = true;
+}
+
+void UMainMenu::NativeDestruct()
+{
+	Super::NativeDestruct();
+	APlayerController* PlayerController = GetOwningPlayer();
+	if (!ensure(PlayerController != nullptr)) return;
+	PlayerController->SetInputMode(FInputModeGameOnly());
+	PlayerController->bShowMouseCursor = false;
+}
+
 bool UMainMenu::Initialize()
 {
 	bool Success = Super::Initialize();
