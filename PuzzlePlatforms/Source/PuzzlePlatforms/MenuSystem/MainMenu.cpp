@@ -21,9 +21,18 @@ bool UMainMenu::Initialize()
 	JoinButton->OnClicked.AddDynamic(this, &UMainMenu::OpenJoinMenu);
 	CancelJoinMenuButton->OnClicked.AddDynamic(this, &UMainMenu::OpenMainMenu);
 	ConfirmServerButton->OnClicked.AddDynamic(this, &UMainMenu::JoinServer);
+	ExitButton->OnClicked.AddDynamic(this, &UMainMenu::ExitGame);
 	return true;
 }
 
+void UMainMenu::ExitGame() 
+{
+	UWorld* World = GetWorld();
+	if (!ensure(World != nullptr)) return;
+	APlayerController* PlayerController = World->GetFirstPlayerController();
+	if (!ensure(PlayerController != nullptr)) return;
+	PlayerController->ConsoleCommand("quit");
+}
 
 void UMainMenu::HostServer()
 {

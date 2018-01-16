@@ -40,6 +40,9 @@ private:
 	class UWidget* MainMenu;
 
 	UPROPERTY(meta = (BindWidget))
+	class UButton* ExitButton;
+
+	UPROPERTY(meta = (BindWidget))
 	class UEditableTextBox* IpAddressField;	
 
 	UFUNCTION()
@@ -53,4 +56,7 @@ private:
 	
 	UFUNCTION()
 	void OpenMainMenu();	
+	
+	UFUNCTION()
+	void ExitGame();
 };
