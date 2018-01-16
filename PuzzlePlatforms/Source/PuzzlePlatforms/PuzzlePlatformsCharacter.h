@@ -31,6 +31,8 @@ public:
 
 protected:
 
+	void InGameMenu();
+
 	/** Resets HMD orientation in VR. */
 	void OnResetVR();
 
