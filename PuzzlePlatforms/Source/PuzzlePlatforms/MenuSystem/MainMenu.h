@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "MenuInterface.h"
-
 #include "MainMenu.generated.h"
 
 
@@ -38,6 +37,9 @@ private:
 	class UButton* CancelJoinMenuButton;
 	
 	UPROPERTY(meta = (BindWidget))
+	class UButton* ConfirmServerButton;
+	
+	UPROPERTY(meta = (BindWidget))
 	class UWidgetSwitcher* MenuSwitcher;
 
 	UPROPERTY(meta = (BindWidget))
@@ -46,8 +48,15 @@ private:
 	UPROPERTY(meta = (BindWidget))
 	class UWidget* MainMenu;
 
+	UPROPERTY(meta = (BindWidget))
+	class UEditableTextBox* IpAddressField;
+	
+
 	UFUNCTION()
 	void HostServer();
+
+	UFUNCTION()
+	void JoinServer();
 
 	UFUNCTION()
 	void OpenJoinMenu();
