@@ -23,12 +23,17 @@ void UPuzzlePlatformsGameInstance::Init()
 	UE_LOG(LogTemp, Warning, TEXT("Found Class %s"), *MenuClass->GetName());
 }
 
-void UPuzzlePlatformsGameInstance::Host()
+void UPuzzlePlatformsGameInstance::TearMenuDown()
 {
 	if (Menu != nullptr)
 	{
 		Menu->RemoveFromViewport();
 	}
+}
+
+void UPuzzlePlatformsGameInstance::Host()
+{
+	TearMenuDown();
 	UEngine *Engine = GetEngine();
 	if (!ensure(Engine != nullptr)) return;
 	Engine->AddOnScreenDebugMessage(0, 2, FColor::Green, TEXT("Hosting"));
@@ -40,10 +45,7 @@ void UPuzzlePlatformsGameInstance::Host()
 
 void UPuzzlePlatformsGameInstance::Join(const FString& Address)
 {
-	if (Menu != nullptr)
-	{
-		Menu->RemoveFromViewport();
-	}
+	TearMenuDown();
 	UEngine *Engine = GetEngine();
 	if (!ensure(Engine != nullptr)) return;
 	Engine->AddOnScreenDebugMessage(0, 5, FColor::Green, FString::Printf(TEXT("Joining %s"), *Address));
@@ -69,4 +71,11 @@ void UPuzzlePlatformsGameInstance::InGameLoadMenu()
 	if (!ensure(Menu != nullptr)) return;
 	Menu->SetMenuInterface(this);
 	Menu->Setup();
+}
+
+void UPuzzlePlatformsGameInstance::LoadMainMenu()
+{
+	APlayerController* PlayerController = GetFirstLocalPlayerController();
+	if (!ensure(PlayerController != nullptr)) return;
+	PlayerController->ClientTravel("/Game/MenuSystem/MainMenu", ETravelType::TRAVEL_Absolute);
 }

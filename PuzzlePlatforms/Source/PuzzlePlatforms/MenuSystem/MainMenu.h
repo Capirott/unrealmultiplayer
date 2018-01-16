@@ -40,8 +40,7 @@ private:
 	class UWidget* MainMenu;
 
 	UPROPERTY(meta = (BindWidget))
-	class UEditableTextBox* IpAddressField;
-	
+	class UEditableTextBox* IpAddressField;	
 
 	UFUNCTION()
 	void HostServer();
