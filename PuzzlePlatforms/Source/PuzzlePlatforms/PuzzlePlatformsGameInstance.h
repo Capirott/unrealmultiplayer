@@ -33,6 +33,7 @@ public:
 
 	void InGameLoadMenu();
 	void LoadMainMenu() override;
+	void RefreshServerList() override;
 private:
 	TSubclassOf<class UUserWidget> MenuClass;
 	TSubclassOf<class UUserWidget> InGameMenuClass;
