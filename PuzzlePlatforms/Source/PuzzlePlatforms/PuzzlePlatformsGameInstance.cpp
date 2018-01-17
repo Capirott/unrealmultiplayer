@@ -11,6 +11,8 @@
 #include "MenuSystem/MainMenu.h"
 #include "MenuSystem/MenuWidget.h"
 
+const static FName SESSION_NAME = TEXT("My Session Game");
+
 UPuzzlePlatformsGameInstance::UPuzzlePlatformsGameInstance(const FObjectInitializer &ObjectInitilizer)
 {
 	ConstructorHelpers::FClassFinder<UMainMenu> MenuBPClass(TEXT("/Game/MenuSystem/WBP_MAINMENU"));
@@ -30,6 +32,7 @@ void UPuzzlePlatformsGameInstance::Init()
 	if (SessionInterface.IsValid()) 
 	{		
 		SessionInterface->OnCreateSessionCompleteDelegates.AddUObject(this, &UPuzzlePlatformsGameInstance::OnCreateSessionComplete);
+		SessionInterface->OnDestroySessionCompleteDelegates.AddUObject(this, &UPuzzlePlatformsGameInstance::OnDestroySessionComplete);
 	}
 	UE_LOG(LogTemp, Warning, TEXT("Found Class %s"), *MenuClass->GetName());
 }
@@ -46,8 +49,16 @@ void UPuzzlePlatformsGameInstance::Host()
 {
 	if (SessionInterface.IsValid())
 	{
-		FOnlineSessionSettings SessionSettings;
-		SessionInterface->CreateSession(0, TEXT("My Session Game"), SessionSettings);
+		FNamedOnlineSession *ExistingSession = SessionInterface->GetNamedSession(SESSION_NAME);
+		if (ExistingSession != nullptr)
+		{
+			SessionInterface->DestroySession(SESSION_NAME);
+		}
+		else
+		{
+			CreateSession();
+		}
+
 	}
 	else 
 	{
@@ -90,6 +101,29 @@ void UPuzzlePlatformsGameInstance::LoadMainMenu()
 	APlayerController* PlayerController = GetFirstLocalPlayerController();
 	if (!ensure(PlayerController != nullptr)) return;
 	PlayerController->ClientTravel("/Game/MenuSystem/MainMenu", ETravelType::TRAVEL_Absolute);
+}
+
+void UPuzzlePlatformsGameInstance::OnDestroySessionComplete(FName SessionName, bool Success)
+{
+	if (Success)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Session deleted!"));
+		CreateSession();
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Session not deleted!"));
+
+	}
+}
+
+void UPuzzlePlatformsGameInstance::CreateSession()
+{
+	if (SessionInterface.IsValid())
+	{
+		FOnlineSessionSettings SessionSettings;
+		SessionInterface->CreateSession(0, SESSION_NAME, SessionSettings);
+	}
 }
 
 void UPuzzlePlatformsGameInstance::OnCreateSessionComplete(FName SessionName, bool Success)
