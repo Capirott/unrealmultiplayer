@@ -17,6 +17,7 @@ public:
 		UMainMenu(const FObjectInitializer& ObjectInitializer);
 		void SetServerList(TArray<FString> ServerNames);
 		void SelectIndex(uint32 Index);
+		void UpdateChildren();
 
 protected:
 	virtual bool Initialize() override;
