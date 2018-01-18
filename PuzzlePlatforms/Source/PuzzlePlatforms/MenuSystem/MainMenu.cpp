@@ -73,9 +73,16 @@ bool UMainMenu::Initialize()
 	}
 
 	if (!ensure(HostButton != nullptr)) return false;
+	if (!ensure(CancelHostMenuButton!= nullptr)) return false;
+	if (!ensure(ConfirmHostMenuButton != nullptr)) return false;
 	if (!ensure(JoinButton != nullptr)) return false;
+	if (!ensure(CancelJoinMenuButton != nullptr)) return false;
+	if (!ensure(ConfirmServerButton != nullptr)) return false;
+	if (!ensure(ExitButton != nullptr)) return false;
 
-	HostButton->OnClicked.AddDynamic(this, &UMainMenu::HostServer);
+	HostButton->OnClicked.AddDynamic(this, &UMainMenu::OpenHostMenu);
+	CancelHostMenuButton->OnClicked.AddDynamic(this, &UMainMenu::OpenMainMenu);
+	ConfirmHostMenuButton->OnClicked.AddDynamic(this, &UMainMenu::HostServer);
 	JoinButton->OnClicked.AddDynamic(this, &UMainMenu::OpenJoinMenu);
 	CancelJoinMenuButton->OnClicked.AddDynamic(this, &UMainMenu::OpenMainMenu);
 	ConfirmServerButton->OnClicked.AddDynamic(this, &UMainMenu::JoinServer);
@@ -96,7 +103,8 @@ void UMainMenu::HostServer()
 {
 	if (MenuInterface != nullptr)
 	{
-		MenuInterface->Host();
+		FString ServerName = ServerHostName->GetText().ToString();
+		MenuInterface->Host(ServerName);
 	}
 }
 
@@ -122,6 +130,11 @@ void UMainMenu::OpenJoinMenu()
 	{
 		MenuInterface->RefreshServerList();
 	}
+}
+
+void UMainMenu::OpenHostMenu()
+{
+	MenuSwitcher->SetActiveWidget(HostMenu);
 }
 
 void UMainMenu::OpenMainMenu()

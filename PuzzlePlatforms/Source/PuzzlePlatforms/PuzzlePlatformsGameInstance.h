@@ -25,7 +25,7 @@ public:
 	void TearMenuDown();
 
 	UFUNCTION(Exec)
-	void Host() override;
+	void Host(FString ServerName) override;
 	UFUNCTION(Exec)
 	void Join(uint32 Index) override;
 	UFUNCTION(BlueprintCallable)
@@ -47,4 +47,5 @@ private:
 	void OnFindSessionComplete(bool Success);
 	void OnJoinSessionComplete(FName SessionName, EOnJoinSessionCompleteResult::Type Result);
 	void CreateSession();
+	FString DesiredServerName;
 };
