@@ -9,7 +9,11 @@ void ALobbyGameMode::PostLogin(APlayerController *NewPlayer)
 	UE_LOG(LogTemp, Warning, TEXT("Player %s connected!"), *NewPlayer->GetName());
 	if (NumberOfPlayers == MaxNumberOfPlayers)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Number of max players reached!"));
+		UWorld* World = GetWorld();
+		if (!ensure(World != nullptr)) return;
+		bUseSeamlessTravel = true;
+		
+		World->ServerTravel("/Game/PuzzlePlatforms/Maps/Game");
 	}
 	Super::PostLogin(NewPlayer);
 }
