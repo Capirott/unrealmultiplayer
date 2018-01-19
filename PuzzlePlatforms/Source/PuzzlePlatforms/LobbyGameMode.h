@@ -16,10 +16,12 @@ class PUZZLEPLATFORMS_API ALobbyGameMode : public APuzzlePlatformsGameMode
 
 private:
 	uint32 NumberOfPlayers = 0;
-	uint32 MaxNumberOfPlayers = 3;
-	
+	uint32 NumberOfPlayersToStart = 2;
+	FTimerHandle GameStartTimer;
+
 public:
 	void PostLogin(APlayerController* NewPlayer) override;
 	void Logout(AController* Exiting) override;
+	void StartGame();
 
 };
